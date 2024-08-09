@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, useCallback, useState } from "react";
-import { TOKEN_POST, USER_GET } from "../../api/api";
+import { createContext, useCallback, useEffect, useState } from "react";
+import { TOKEN_POST, TOKEN_VALIDATE_POST, USER_GET } from "../../api/api";
 
 export const UserContext = createContext();
 
@@ -17,7 +17,7 @@ export const UserStorage = ({ children }) => {
       const response = await fetch(url, options);
       const json = await response.json();
       setData(json);
-      console.log(json);
+      console.log("dados", json);
       setLogin(true);
     }
   }
@@ -47,6 +47,29 @@ export const UserStorage = ({ children }) => {
       setLoading(false);
     }
   }
+
+  async function autoLogin() {
+    const token = await AsyncStorage.getItem("userToken");
+    if (token !== null) {
+      try {
+        setError(null);
+        setLoading(true);
+        const { url, options } = TOKEN_VALIDATE_POST(token);
+        const response = await fetch(url, options);
+        if (!response.ok) throw new Error("Token inválido");
+
+        // console.log("userToken", token);
+      } catch (error) {
+        console.log(error);
+
+        userLogout();
+      }
+    }
+  }
+
+  useEffect(() => {
+    autoLogin();
+  }, [userLogout]);
 
   const userLogout = useCallback(async () => {
     setData(null);
