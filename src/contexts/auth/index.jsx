@@ -29,12 +29,11 @@ export const UserStorage = ({ children }) => {
       const { url, options } = TOKEN_POST({ email, password });
       const tokenRes = await fetch(url, options);
       console.log(url);
-      const json = await tokenRes.json();
-      if (json.ok === false) {
-        throw new Error(" Usuário inválido");
+      const json = tokenRes;
+      if (json.status === 404) {
+        throw new Error("Usuário inválido");
       }
-
-      const { token } = json;
+      const { token } = await json.json();
       await AsyncStorage.setItem("userToken", token);
       await getUser(token);
       // navigate("/");
@@ -57,13 +56,16 @@ export const UserStorage = ({ children }) => {
         const { url, options } = TOKEN_VALIDATE_POST(token);
         const response = await fetch(url, options);
         if (!response.ok) throw new Error("Token inválido");
-
+        await getUser(token);
         // console.log("userToken", token);
       } catch (error) {
         console.log(error);
-
         userLogout();
+      } finally {
+        setLoading(false);
       }
+    } else {
+      setLogin(false);
     }
   }
 
