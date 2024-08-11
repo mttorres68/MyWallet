@@ -1,4 +1,10 @@
-import { Text, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useContext, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { TextField } from "../../components/forms/textField";
@@ -47,7 +53,11 @@ export default function SignIn() {
       {email.error && <Text style={styles.error}>{email.error}</Text>}
 
       <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
-        <Text style={styles.titleButton}>Acessar conta...</Text>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={styles.titleButton}>Acessar conta</Text>
+        )}
       </TouchableOpacity>
     </SafeAreaView>
   );

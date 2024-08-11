@@ -5,14 +5,14 @@ import Header from "../../components/header/header";
 import { UserContext } from "../../contexts/auth";
 
 export default function Home() {
-  const { userLogout } = useContext(UserContext);
+  const { userLogout, data } = useContext(UserContext);
 
   const handleSignOut = () => {
     userLogout();
   };
   return (
     <>
-      <Header onPress={() => handleSignOut()} />
+      <Header userName={data.name} onPress={() => handleSignOut()} />
       <View style={styles.container}>
         <Text>Home</Text>
       </View>

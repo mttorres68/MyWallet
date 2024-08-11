@@ -1,10 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 
-export default function Header({ onPress, ...props }) {
+export default function Header({ onPress, userName, ...props }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bem-vindo/</Text>
+      <View>
+        <Text style={styles.title}>Bem-vindo/</Text>
+        <Text style={styles.titleUser}>{userName}</Text>
+      </View>
       <TouchableOpacity {...props} onPress={onPress}>
         <Text style={styles.signOut}>Sair</Text>
       </TouchableOpacity>
@@ -25,7 +28,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     color: "#f7f7f7",
-    fontWeight: "medium",
+    fontWeight: "normal",
+  },
+  titleUser: {
+    color: "#f7f7f7",
+    fontWeight: "bold",
+    fontSize: 20,
+    textTransform: "capitalize",
   },
   signOut: {
     fontSize: 16,
